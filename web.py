@@ -1,3 +1,6 @@
+import os 
+from models import db
+
 import flask 
 import models 
 from flask import request
@@ -6,7 +9,11 @@ from flask_cors import CORS
 app = flask.Flask("hrms")
 CORS(app) 
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+
 db = models.SQLAlchemy(model_class=models.HRDBBase)
+
+db.init_app(app)
 
 @app.route("/", methods=["GET"])
 def index():

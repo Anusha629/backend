@@ -5,7 +5,9 @@ from typing import List
 from sqlalchemy import String, Integer, Date, create_engine, ForeignKey, UniqueConstraint, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy 
+
+db = SQLAlchemy()
 
 class HRDBBase(DeclarativeBase):
     def __repr__(self):
