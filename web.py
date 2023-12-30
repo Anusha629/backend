@@ -1,5 +1,6 @@
-import os 
-from models import db
+import os
+from flask_sqlalchemy import SQLAlchemy
+
 
 import flask 
 import models 
@@ -9,7 +10,8 @@ from flask_cors import CORS
 app = flask.Flask("hrms")
 CORS(app) 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+
 
 db = models.SQLAlchemy(model_class=models.HRDBBase)
 
@@ -23,6 +25,7 @@ def index():
 
 @app.route("/employees")
 def employees():
+
     users= db.select(models.Employee).order_by(models.Employee.fname)
     users = db.session.execute(users).scalars()
 
@@ -37,7 +40,8 @@ def employees():
             "phone": user.phone}
         u_list.append(data)
 
-    return flask.jsonify(u_list)
+    return flask.jsonify(u_list)  
+        
 
 
 @app.route("/employees/<int:empid>", methods=["GET"])
@@ -110,6 +114,10 @@ def add_leave(empid):
 @app.route('/about')
 def about():
     return flask.render_template('about.html') 
+
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run()
